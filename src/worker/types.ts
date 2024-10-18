@@ -1,3 +1,4 @@
+import { ResultDetail } from "../pool/types";
 import type { BufferTypes, Size } from "./buffer";
 
 /**
@@ -138,4 +139,7 @@ export type ProgressAction<Progress = unknown> = Action<Progress, "progress">;
  * A result action.
  * @template Result The type of the result.
  */
-export type ResultAction<Result = unknown> = Action<Result, "result">;
+export type ResultAction<Result = unknown> = Action<
+  ResultDetail<Result>,
+  "result"
+>;

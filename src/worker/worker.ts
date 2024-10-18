@@ -19,9 +19,9 @@ import { makeHeightmap } from "../capabilities/heightmap";
 import type { IncomingMessage, Sizable } from "./types";
 import {
   buildContext,
+  createError,
+  createResult,
   dispatch,
-  dispatchError,
-  dispatchResult,
   idGen,
   makeHandler,
   makeTypeHandler,
@@ -196,12 +196,12 @@ export function onMessage(event: MessageEvent<IncomingMessage>): void {
     }
 
     // Notify the main thread that the task is complete.
-    dispatchResult(result, duration, context.transferables);
+    dispatch(createResult(result, duration), context.transferables);
   } catch (error: unknown) {
     const message = error instanceof Error
       ? error.message
       : "An unknown error occurred";
-    dispatchError(message, duration);
+    dispatch(createError(message, duration));
   } finally {
     busy = false;
   }

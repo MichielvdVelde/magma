@@ -44,7 +44,7 @@ export function applyHydraulicErosion<Type extends BufferTypes>(
   const water = new Float32Array(buffer.buffer.length);
 
   for (let i = 0; i < iterations; i++) {
-    for (const { x, y, value, index } of buffer.values()) {
+    for (const { x, y, value, index } of buffer) {
       let minSlope = Infinity;
       let minNeighbor: WithValue<Point> | undefined;
 

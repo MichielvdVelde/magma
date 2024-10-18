@@ -35,7 +35,7 @@ export function applyThermalErosion<Type extends BufferTypes>(
   const sediment = new Float32Array(buffer.buffer.length);
 
   for (let i = 0; i < iterations; i++) {
-    for (const { x, y, value, index } of buffer.values()) {
+    for (const { x, y, value, index } of buffer) {
       let minSlope = Infinity;
       let minNeighbor: WithValue<Point> | undefined;
 

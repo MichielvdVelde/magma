@@ -1,8 +1,9 @@
+import type { ProgressDetail } from "../pool/types";
 import type { BufferTypes } from "./buffer";
-import type { ProgressDetail, ResultDetail } from "../pool/pool";
 import type {
   Context,
   ErrorAction,
+  ResultAction,
   Sizable,
   Task,
   TransferableBuffer,
@@ -118,9 +119,7 @@ export function buildContext<Config, Progress = unknown>(
   return {
     id,
     config,
-    get start() {
-      return start;
-    },
+    start,
     get transferables() {
       return [...transferables];
     },
@@ -139,30 +138,6 @@ export function buildContext<Config, Progress = unknown>(
       }
     },
   };
-}
-
-/**
- * Dispatches an error message to the main thread.
- * @param message The error message.
- * @param duration The duration of the error message.
- */
-export function dispatchError(message: string, duration?: number): void {
-  dispatch(createError(message, duration));
-}
-
-/**
- * Dispatches a result message to the main thread.
- * @template Result The type of the result.
- * @param result The result to dispatch.
- * @param duration The duration of the task.
- * @param transferables The buffers to transfer with the message.
- */
-export function dispatchResult<Result = unknown>(
-  result: Result,
-  duration: number,
-  transferables?: TransferableBuffer[],
-): void {
-  dispatch(createResult(result, duration), transferables);
 }
 
 /**
@@ -189,7 +164,7 @@ export function createError(message: string, duration?: number): ErrorAction {
 }
 
 /**
- * Creates a result detail.
+ * Creates a result action.
  * @template Result The type of the result.
  * @param result The result.
  * @param duration The duration of the task.
@@ -197,6 +172,6 @@ export function createError(message: string, duration?: number): ErrorAction {
 export function createResult<Result>(
   result: Result,
   duration: number,
-): ResultDetail<Result> {
-  return { result, duration };
+): ResultAction<Result> {
+  return { type: "result", payload: { result, duration } };
 }
